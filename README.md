@@ -1,6 +1,7 @@
 ## How to run
 
 - Clone the repo
+- Install the adonis CLI `npm i -g @adonisjs/cli`
 - Run `npm install` to install all dependencies
 - Make a copy of `.env.example` rename it to `.env`
 - Run `adonis key:generate` to generate the secret key
