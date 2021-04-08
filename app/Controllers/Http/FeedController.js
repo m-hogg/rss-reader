@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const parseRSS = use('App/Services/ParseRSS.js')
+const refreshFeeds = use('App/Services/RefreshFeeds.js')
 const Feed = use('App/Models/Feed')
 const Article = use('App/Models/Article')
 
@@ -92,16 +93,12 @@ class FeedController {
     return view.render('feeds.show', { feed: feed.toJSON() })
   }
 
-  /**
-   * Render a form to update an existing feed.
-   * GET feeds/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  // Refresh a user's feeds
+  async refresh ({ auth, response }) {
+    const feedIds = (await auth.user.feeds().fetch()).toJSON().map(feed => feed.id)
+    await refreshFeeds(feedIds)
+
+    return response.redirect('home')
   }
 
   /**

@@ -14,7 +14,7 @@ module.exports = async function parse (feedUrl) {
         date_published: Date.parse(item.pubDate),
         description: item.contentSnippet,
         article_url: item.link,
-        image_url: item.image_url
+        image_url: feed.image ? feed.image.url : null
     }))
 
     return {

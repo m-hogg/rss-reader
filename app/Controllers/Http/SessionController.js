@@ -1,4 +1,5 @@
 'use strict'
+const refreshFeeds = use('App/Services/RefreshFeeds')
 
 class SessionController {
   create ({ view }) {
@@ -55,8 +56,10 @@ class SessionController {
     }
 
     /**
-     * We are authenticated.
+     * We are authenticated. Want to refresh the users feeds then log him in
      */
+    let userFeeds = await auth.user.feeds().fetch()
+    await refreshFeeds(userFeeds.toJSON().map(feed => feed.id))
     return response.redirect('/home')
   }
 

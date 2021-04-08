@@ -38,6 +38,7 @@ Route.group(() => {
   Route.post('feeds', 'FeedController.store')
   Route.get('feeds/create', 'FeedController.create')
   Route.get('feeds/:id', 'FeedController.show')
+  Route.get('refresh', 'FeedController.refresh')
   Route.delete('feeds/:id', 'FeedController.destroy')
 
 
