@@ -19,10 +19,6 @@ class User extends Model {
   feeds () {
     return this.belongsToMany('App/Models/Feed')
   }
-
-  // articles () {
-  //   return this.manyThrough('App/Models/Feed', 'articles').orderBy('date_published').with('feed')
-  // }
 }
 
 module.exports = User

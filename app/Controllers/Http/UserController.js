@@ -18,7 +18,7 @@ class UserController {
       .limit(25)
       .fetch();
 
-    return view.render('index', { articles: articles.toJSON() })
+    return view.render('user.index', { articles: articles.toJSON() })
   }
 
   create ({ view }) {

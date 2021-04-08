@@ -13,7 +13,7 @@ const Article = use('App/Models/Article')
  */
 class FeedController {
   /**
-   * Show a list of all feeds.
+   * Show a list of all feeds for a user.
    * GET feeds
    *
    * @param {object} ctx
@@ -21,7 +21,10 @@ class FeedController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ auth: { user }, request, response, view }) {
+    const feeds = await user.feeds().fetch();
+
+    return view.render('feeds.index', { feeds: feeds.toJSON() })
   }
 
   /**

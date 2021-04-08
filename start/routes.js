@@ -35,6 +35,7 @@ Route.group(() => {
   Route.get('home', 'UserController.index')
 
   Route.get('feeds/create', 'FeedController.create')
+  Route.get('feeds', 'FeedController.index')
   Route.post('feeds', 'FeedController.store')
   // Route.get('posts/create', 'PostController.create')
   // Route.post('posts', 'PostController.store')
