@@ -15,14 +15,14 @@
 
 const Route = use('Route')
 
-Route.get('/', 'ArticleController.index')
+
 
 // Those routes should be only accessible
 // when you are not logged in
 Route.group(() => {
+  Route.get('/', 'FeedController.random')
   Route.get('login', 'SessionController.create')
   Route.post('login', 'SessionController.store')
-
   Route.get('register', 'UserController.create')
   Route.post('register', 'UserController.store')
 }).middleware(['guest'])
@@ -38,7 +38,6 @@ Route.group(() => {
   Route.post('feeds', 'FeedController.store')
   Route.get('feeds/create', 'FeedController.create')
   Route.get('feeds/:id', 'FeedController.show')
-  Route.get('refresh', 'FeedController.refresh')
   Route.delete('feeds/:id', 'FeedController.destroy')
 
 

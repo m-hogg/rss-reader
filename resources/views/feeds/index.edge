@@ -11,9 +11,9 @@
     </div>
     @if(feeds.length)
         @each(feed in feeds)
-            <div class="p-10 bg-white rounded-lg mt-5 flex justify-between">
+            <div class="p-10 bg-white rounded-lg mt-5 flex-column md:flex justify-between">
                 <span class="text-lg font-medium">{{ feed.title }}</span>
-                <div class="flex">
+                <div class="flex mt-5 md:mt-0">
                     <a href="/feeds/{{ feed.id }}" class="text-indigo-600 mr-5">View Feed</a>
                     <form action="/feeds/{{ feed.id }}?_method=delete" method="post">
                         <button type="submit" class="text-red-600">

@@ -5,9 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const parseRSS = use('App/Services/ParseRSS.js')
-const refreshFeeds = use('App/Services/RefreshFeeds.js')
 const Feed = use('App/Models/Feed')
-const Article = use('App/Models/Article')
 
 /**
  * Resourceful controller for interacting with feeds
@@ -56,12 +54,7 @@ class FeedController {
       let res = await parseRSS(url)
 
       // Find the feed if it already exists in our DB or create it if not
-      let feed = await Feed.findOrCreate({ title: res.title, url: res.url, link: res.link }, { title: res.title, url: res.url, link: res.link })
-
-      // Create the articles we found where they don't already exist
-      for (let article of res.articles) {
-        await Article.findOrCreate({ feed_id: feed.id, title: article.title }, { feed_id: feed.id, ...article })
-      }
+      let feed = await Feed.findOrCreate({ title: res[0].feed_title, url: res[0].feed_url, link: res[0].feed_link }, { title: res[0].feed_title, url: res[0].feed_url, link: res[0].feed_link })
 
       // Associate feed with user
       await auth.user.feeds().attach([feed.id])
@@ -88,17 +81,11 @@ class FeedController {
    */
   async show ({ params, request, response, view }) {
     const feed = await Feed.find(params.id)
-    await feed.load('articles')
+
+    feed.articles = await parseRSS(feed.url)
+    feed.articles.sort((a,b) => b.date_published - a.date_published)
 
     return view.render('feeds.show', { feed: feed.toJSON() })
-  }
-
-  // Refresh a user's feeds
-  async refresh ({ auth, response }) {
-    const feedIds = (await auth.user.feeds().fetch()).toJSON().map(feed => feed.id)
-    await refreshFeeds(feedIds)
-
-    return response.redirect('home')
   }
 
   /**
@@ -112,10 +99,27 @@ class FeedController {
   async destroy ({ params, request, response }) {
     const feed = await Feed.find(params.id)
 
-    await feed.articles().delete()
     await feed.delete()
 
     return response.redirect('back')
+  }
+
+  async random ({ view }) {
+    // Grab some random feeds
+    let feeds = (await Feed.pick(5)).toJSON()
+
+    let articles = []
+
+    for (let feed of feeds) {
+      let parsed = await parseRSS(feed.url)
+      articles = [...articles, ...parsed]
+    }
+
+    articles.sort((a, b) => b.date_published - a.date_published)
+
+    if (articles.length > 25) articles.length = 25;
+
+    return view.render('index', { articles })
   }
 }
 

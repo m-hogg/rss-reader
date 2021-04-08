@@ -1,24 +1,27 @@
 'use strict'
 
 const User = use('App/Models/User')
-const Article = use('App/Models/Article')
+const parseRSS = use('App/Services/ParseRSS')
 const { validateAll } = use('Validator')
 
 class UserController {
 
   async index ({ auth, view }) {
     // Grab the IDs of the feeds the user is subscribed to
-    let feedIDs = (await auth.user.feeds().select('id').fetch()).toJSON().map((item => item.id))
+    let feeds = (await auth.user.feeds().fetch()).toJSON()
 
-    let articles = await Article
-      .query()
-      .whereIn('feed_id', feedIDs)
-      .orderBy('date_published', 'desc')
-      .with('feed')
-      .limit(25)
-      .fetch();
+    let articles = []
 
-    return view.render('user.index', { articles: articles.toJSON() })
+    for (let feed of feeds) {
+      let parsed = await parseRSS(feed.url)
+      articles = [...articles, ...parsed]
+    }
+
+    articles.sort((a, b) => b.date_published - a.date_published)
+
+    if (articles.length > 25) articles.length = 25;
+
+    return view.render('user.index', { articles })
   }
 
   create ({ view }) {
