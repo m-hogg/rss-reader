@@ -6,19 +6,14 @@
 
 <div class="w-3/4 mx-auto">
     @each(article in articles)
-        {{--  <div>{{ article.title }}</div>  --}}
-        <a href={{ article.article_url }}>
-            <div class="bg-gray-200 hover:bg-gray-300 rounded-lg p-10 mb-5 block">
-                @if(article.image_url)
-                    <img src={{ article.image_url }}>
-                @endif
-                <div>
-                    <h3 class="font-bold text-xl mb-3">{{ article.title }}</h3>
-                    <span>{{ article.description }}</span>
-                    <a href={{article.feed.link}}>
-                        <span>{{ article.feed.title }}</span>
-                    </a>
-                </div>
+        <a href={{ article.article_url }} target="_blank" class="p-10 bg-gray-200 hover:bg-gray-300 rounded-lg mb-5 block">
+            @if(article.image_url)
+                <img src={{ article.image_url }}>
+            @endif
+            <div>
+                <h2 class="mb-5 -mt-5 text-right">{{ article.feed.title }}</h2>
+                <h3 class="font-bold text-xl mb-3">{{ article.title }}</h3>
+                {{ article.description }}
             </div>
         </a>
     @endeach     

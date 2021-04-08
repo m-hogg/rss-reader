@@ -1,0 +1,27 @@
+@layout('layout.app')
+
+@section('content')
+
+<h3 class="text-center text-xl text-gray-700 mb-10 mx-auto">Articles from <span class="text-indigo-600 font-semibold">{{ feed.title }}</span></h3>
+
+<div class="w-3/4 mx-auto">
+    @each(article in feed.articles)
+        {{--  <div>{{ article.title }}</div>  --}}
+        <a href={{ article.article_url }} target="_blank">
+            <div class="bg-gray-200 hover:bg-gray-300 rounded-lg p-10 mb-5 block">
+                @if(article.image_url)
+                    <img src={{ article.image_url }}>
+                @endif
+                <div>
+                    <h3 class="font-bold text-xl mb-3">{{ article.title }}</h3>
+                    <span>{{ article.description }}</span>
+                    <a href={{article.feed.link}} target="_blank">
+                        <span>{{ article.feed.title }}</span>
+                    </a>
+                </div>
+            </div>
+        </a>
+    @endeach     
+</div>
+
+@endsection

@@ -1,0 +1,7 @@
+Some good feeds to test with:
+
+https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml
+http://rss.cnn.com/rss/cnn_topstories.rss
+https://feeds.a.dj.com/rss/RSSOpinion.xml
+https://feeds.a.dj.com/rss/RSSWorldNews.xml
+https://www.huffpost.com/section/front-page/feed?x=1

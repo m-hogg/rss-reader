@@ -34,12 +34,11 @@ Route.group(() => {
 
   Route.get('home', 'UserController.index')
 
-  Route.get('feeds/create', 'FeedController.create')
   Route.get('feeds', 'FeedController.index')
   Route.post('feeds', 'FeedController.store')
-  // Route.get('posts/create', 'PostController.create')
-  // Route.post('posts', 'PostController.store')
-  // Route.get('posts/:id/edit', 'PostController.edit')
-  // Route.get('posts/:id/delete', 'PostController.delete')
-  // Route.put('posts/:id', 'PostController.update')
+  Route.get('feeds/create', 'FeedController.create')
+  Route.get('feeds/:id', 'FeedController.show')
+  Route.delete('feeds/:id', 'FeedController.destroy')
+
+
 }).middleware(['auth'])

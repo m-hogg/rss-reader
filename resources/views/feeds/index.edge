@@ -3,23 +3,29 @@
 @section('content')
 
 <div class="w-3/4 mx-auto">
-    <div class="flex justify-center items-baseline">
-        <h3 class="text-center text-xl text-gray-700 font-semibold mr-auto">Your Feeds</h3>
+    <div class="flex justify-center items-baseline mb-10">
+        <h3 class="text-center text-2xl text-gray-700 font-semibold mr-auto">Your Feeds</h3>
         <a href="/feeds/create" class="ml-auto text-base font-medium leading-6 text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-500 focus:outline-none focus:shadow-outline-blue active:bg-gray-50 active:text-indigo-700">
             Add a Feed
         </a>    
     </div>
-    @each(feed in feeds)
-        <div class="p-10 bg-white rounded-lg mt-5 flex justify-between">
-            <span class="text-lg font-medium">{{ feed.title }}</span>
-            <div>
-                <a href="/feeds/{{ feed.id }}" class="text-indigo-600 mr-5">View Feed</a>
-                <a href="/feeds/delete/{{ feed.id }}" class="text-red-600">
-                    Delete
-                </a>
+    @if(feeds.length)
+        @each(feed in feeds)
+            <div class="p-10 bg-white rounded-lg mt-5 flex justify-between">
+                <span class="text-lg font-medium">{{ feed.title }}</span>
+                <div class="flex">
+                    <a href="/feeds/{{ feed.id }}" class="text-indigo-600 mr-5">View Feed</a>
+                    <form action="/feeds/{{ feed.id }}?_method=delete" method="post">
+                        <button type="submit" class="text-red-600">
+                            Delete
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
-    @endeach     
+        @endeach
+    @else
+        <div class="text-center mx-auto mt-10">No feeds yet! Click "Add a Feed" to add one.</div>
+    @endif
 </div>
 
 @endsection

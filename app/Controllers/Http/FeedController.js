@@ -86,6 +86,10 @@ class FeedController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    const feed = await Feed.find(params.id)
+    await feed.load('articles')
+
+    return view.render('feeds.show', { feed: feed.toJSON() })
   }
 
   /**
@@ -101,17 +105,6 @@ class FeedController {
   }
 
   /**
-   * Update feed details.
-   * PUT or PATCH feeds/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
    * Delete a feed with id.
    * DELETE feeds/:id
    *
@@ -120,6 +113,12 @@ class FeedController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const feed = await Feed.find(params.id)
+
+    await feed.articles().delete()
+    await feed.delete()
+
+    return response.redirect('back')
   }
 }
 
