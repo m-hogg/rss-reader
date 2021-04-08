@@ -1,14 +1,24 @@
 'use strict'
 
 const User = use('App/Models/User')
+const Article = use('App/Models/Article')
 const { validateAll } = use('Validator')
 
 class UserController {
 
   async index ({ auth, view }) {
-    const articles = await auth.user.articles();
+    // Grab the IDs of the feeds the user is subscribed to
+    let feedIDs = (await auth.user.feeds().select('id').fetch()).toJSON().map((item => item.id))
 
-    return view.render('index', { articles })
+    let articles = await Article
+      .query()
+      .whereIn('feed_id', feedIDs)
+      .orderBy('date_published', 'desc')
+      .with('feed')
+      .limit(25)
+      .fetch();
+
+    return view.render('index', { articles: articles.toJSON() })
   }
 
   create ({ view }) {
@@ -65,7 +75,7 @@ class UserController {
     // Authenticate the user
     await auth.login(user)
 
-    return response.redirect('/')
+    return response.route('/home')
   }
 }
 

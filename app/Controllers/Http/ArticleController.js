@@ -20,7 +20,12 @@ class ArticleController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    const articles = await Article.all();
+    const articles = await Article
+      .query()
+      .orderBy('date_published', 'desc')
+      .limit(25)
+      .with('feed')
+      .fetch();
 
     return view.render('index', { articles: articles.toJSON() })
   }

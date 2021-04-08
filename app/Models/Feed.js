@@ -8,7 +8,7 @@ class Feed extends Model {
         return this.hasMany('App/Models/Article')
     }
     users () {
-        return this.belongsToMany('App/Models/Users')
+        return this.belongsToMany('App/Models/User')
     }
 }
 

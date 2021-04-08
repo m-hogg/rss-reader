@@ -10,6 +10,7 @@ class FeedSchema extends Schema {
       table.timestamps()
       table.string('title', 50).notNullable().unique()
       table.string('url').notNullable().unique()
+      table.string('link').notNullable()
     })
   }
 

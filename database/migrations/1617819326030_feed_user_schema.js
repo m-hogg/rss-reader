@@ -6,15 +6,15 @@ const Schema = use('Schema')
 class FeedUserSchema extends Schema {
   up () {
     this.create('feed_user', (table) => {
-      table.increments()
-      table.timestamps()
-      table.integer('user_id')
       table.integer('feed_id')
+      table.integer('user_id')
+      table.foreign('feed_id').references('feed.id')
+      table.foreign('user_id').references('user.id')
     })
   }
 
   down () {
-    this.drop('feed_users')
+    this.drop('feed_user')
   }
 }
 

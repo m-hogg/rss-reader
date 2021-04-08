@@ -49,11 +49,10 @@ class FeedController {
     try {
       // Grab the url from the form and run it through the parser
       const { url } = request.only(['url'])
-      console.log(url)
       let res = await parseRSS(url)
 
       // Find the feed if it already exists in our DB or create it if not
-      let feed = await Feed.findOrCreate({ title: res.title, url: res.url }, { title: res.title, url: res.url })
+      let feed = await Feed.findOrCreate({ title: res.title, url: res.url, link: res.link }, { title: res.title, url: res.url, link: res.link })
 
       // Create the articles we found where they don't already exist
       for (let article of res.articles) {
@@ -61,10 +60,10 @@ class FeedController {
       }
 
       // Associate feed with user
-      auth.user.feeds().attach(feed)
+      await auth.user.feeds().attach([feed.id])
 
       // Flash a success message and redirect back
-      session.flash({ success: 'Feed has been added successfully!' });
+      session.flash({ success: 'Feed has been added successfully!' })
       return response.redirect('back')
       
     } catch (error) {
